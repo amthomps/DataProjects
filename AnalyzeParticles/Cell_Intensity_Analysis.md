@@ -52,7 +52,7 @@ We can now use ImageJ's built-in Analyze Particles function. This function requi
 
 ``` r
 selectWindow(name);
-#open a copy of the image.  We will find the location of particles in this copy and #measure values at the mapped locations in the original image.
+#open a copy of the image.  We will find the location of particles in this copy and   #measure values at the mapped locations in the original image.
 run("Duplicate...", " ");
 #a threshold of 805 seems appropriate for these images - 
 #above 805 is cell material, below 805 is background after flat-fielding.  
@@ -112,7 +112,7 @@ HistPart50 <- ggplot(AllImages %>% filter(Exposure == "50ms"), aes(x = Mean)) +
 HistPart50
 ```
 
-![](Cell_Intensity_Analysis_complete_writeup_files/figure-markdown_github/plot%20particle%20histograms-1.png)
+![](Cell_Intensity_Analysis_files/figure-markdown_github/plot%20particle%20histograms-1.png)
 
 **Figure 3. Histogram of particle intensity at each condtion.** Cells were imaged in 0.5X EvaGreen in various concentrations of Triton (0.02%, 0.03%, 0.05% w/v).
 
@@ -130,7 +130,7 @@ ViolinPart50 <- ggplot(AllImages %>% filter(Exposure == "50ms"),
 ViolinPart50
 ```
 
-![](Cell_Intensity_Analysis_complete_writeup_files/figure-markdown_github/plot%20violin%20distributions-1.png)
+![](Cell_Intensity_Analysis_files/figure-markdown_github/plot%20violin%20distributions-1.png)
 
 **Figure 4. Violin plot of particle intensity at each condtion.** Same data from the histogram in Figure 3. Cells were imaged in 0.5X EvaGreen in various concentrations of Triton (w/v%). Purple line is at the threshold for cell detection, so any cells with intensity below this threshold were not measured by ImageJ. Lines within the violin plot represent the 1st, 2nd, and 3rd quartiles. In a violin plot, the width of the colored space correlates to the number of cells with that intensity.
 
