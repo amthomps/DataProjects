@@ -1,0 +1,23 @@
+//first remove any global scale so that all size measurements are in units of pixels
+run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel global");
+dir = File.directory;
+name = getTitle();
+namebase = replace(name, ".tif", "");
+//mulitply the image by a factor of 50.  To flat field, we need to divide the image by the flat field image, so we multiply first to maintain our dynamic range.
+run("Multiply...", "value=50.000");
+open(dir + "20180118-flat-field-zoom-125-test4.tif");
+//flat-fielding operation
+imageCalculator("Divide", name,"20180118-flat-field-zoom-125-test4.tif");
+selectWindow(name);
+//open a copy of the image.  We will find the location of particles in this copy and measure values at the mapped locations in the original image.
+run("Duplicate...", " ");
+//a threshold of 805 seems appropriate for these images - above 805 is cell material, below 805 is background after flat-fielding.  4095 is the max value for these images, which were aquired with a 12-bit camera (but you might see them displayed in ImageJ as 16-bit - the highest value is still 4095).
+setThreshold(805, 4095);
+setOption("BlackBackground", false);
+//convert the image copy to binary - particle finder's requirement.
+run("Convert to Mask");
+//set measurements to particle area, particle integrated density, and particle median.
+run("Set Measurements...", "area integrated median redirect=" + name +" decimal=3");
+//particle parameters.  currently looking for particles between 2-200 square pixels, with 0.8-1.00 circularity.  Make a new window showing particle locations.
+run("Analyze Particles...", "size=2-200 circularity=0.80-1.00 show=Outlines display");
+saveAs("results",  dir + namebase + ".csv");

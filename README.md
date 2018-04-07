@@ -7,3 +7,5 @@ This is a guided project from [Data Camp](https://www.datacamp.com/projects/74).
 Most of the markdown and commented-out code were provided, and I filled in the rest of the code.  Everything was checked by the Data Camp system.  
 * **Clinical Trials Gov Scraper**  
 This is an incomplete project I am working on.  I would like to be able to pull data from a search of clinicaltrials.gov, for instance search "diabetes", and extract some info from each trial (study title, condition, intervention, trial phase).  I would like to be able to see at any time what the trends are in diabetes trials, i.e. proportion of type 1 vs. type 2 vs. gestational diabetes, drug vs. device interventions, etc.  I currently can extract the necessary info from a single url. :)
+* **Analyze Particles**  
+This is a short analysis in ImageJ and R demonstrating the ImageJ built-in function *Analyze Particles.*  In this project, I extract size and fluorescence intensity information from a fluorescence microscopy image of single cells using an ImageJ macro, then compare fluorescence intensity of cells under multiple experimental conditions.
