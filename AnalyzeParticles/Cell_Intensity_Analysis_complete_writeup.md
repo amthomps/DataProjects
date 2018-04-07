@@ -11,7 +11,7 @@ require(dplyr); require(tidyr); require(ggplot2); require(knitr)
 
 <img src="./Example_image_3_FAM_50ms.png" width="50%" />
 
-**Figure 1. Raw image of cells stained with EvaGreen on the Olympus.**
+**Figure 1. Raw fluorescence image of cells stained with EvaGreen on an Olympus MVX10 microscope.**
 
 Images were run through the imageJ macro CellIntensityAnalysis which performs flat-fielding and particle analysis to report the size and intensity of each cell above a certain threshold. Here is an example of where the macro found particles meeting the selection criteria:
 
@@ -40,10 +40,11 @@ To perform the correction, we will first multiply every pixel intensity by a fac
 
 ``` r
 #mulitply the image by a factor of 50.  
-#To flat field, we need to divide the image by the flat field image, so we multiply first to maintain our dynamic range.
+#To flat field, we need to divide the image by the flat field image.
+#We multiply all pixels by a factor first to maintain our dynamic range.
 run("Multiply...", "value=50.000");
 open(dir + "20180118-flat-field-zoom-125-test4.tif");
-#flat-fielding operation
+#Flat-fielding operation
 imageCalculator("Divide", name,"20180118-flat-field-zoom-125-test4.tif");
 ```
 
@@ -51,16 +52,20 @@ We can now use ImageJ's built-in Analyze Particles function. This function requi
 
 ``` r
 selectWindow(name);
-#open a copy of the image.  We will find the location of particles in this copy and measure values at the mapped locations in the original image.
+#open a copy of the image.  We will find the location of particles in this copy and #measure values at the mapped locations in the original image.
 run("Duplicate...", " ");
-#a threshold of 805 seems appropriate for these images - above 805 is cell material, below 805 is background after flat-fielding.  4095 is the max value for these images, which were aquired with a 12-bit camera (but you might see them displayed in ImageJ as 16-bit - the highest value is still 4095).
+#a threshold of 805 seems appropriate for these images - 
+#above 805 is cell material, below 805 is background after flat-fielding.  
+#4095 is the max value for these images, which were aquired with a 12-bit camera.
 setThreshold(805, 4095);
 setOption("BlackBackground", false);
 #convert the image copy to binary - particle finder's requirement.
 run("Convert to Mask");
 #set measurements to particle area, particle integrated density, and particle median.
 run("Set Measurements...", "area integrated median redirect=" + name +" decimal=3");
-#particle parameters.  currently looking for particles between 2-200 square pixels, with 0.8-1.00 circularity.  Make a new window showing particle locations.
+#Set the particle parameters.  
+#Currently we are looking for particles between 2-200 square pixels, 
+#with 0.8-1.00 circularity.
 run("Analyze Particles...", "size=2-200 circularity=0.80-1.00 show=Outlines display");
 saveAs("results",  dir + namebase + ".csv");
 ```
@@ -85,14 +90,9 @@ The conditions and exposure times were part of the filenames, so I pull those ou
 ``` r
 #separate the image title column into the experimental condition "condition", and the camera exposure time "exposure".
 AllImages <- separate(AllImages, ImageTitle, sep = "_FAM_", into = c("Condition", "Exposure"))
-#keep only the measurement columns we're interested in, including the particle area, the integrated density "IntDen", and the median intensity.
+#keep only the measurement columns for particle area, integrated density "IntDen", and the median intensity.
 AllImages <- select(AllImages, Condition, Exposure, Area, IntDen, Median)
 AllImages <- mutate(AllImages, Mean = IntDen/Area)
-```
-
-    ## Warning: package 'bindrcpp' was built under R version 3.3.3
-
-``` r
 #Decode the condition identity - in this experiment the condition # corresponds to the Triton concentration (as % w/v Triton)
 AllImages <- mutate(AllImages, Triton = case_when(
   Condition == 1 ~ 0.02,
@@ -111,8 +111,6 @@ HistPart50 <- ggplot(AllImages %>% filter(Exposure == "50ms"), aes(x = Mean)) +
   theme(panel.grid = element_blank())
 HistPart50
 ```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](Cell_Intensity_Analysis_complete_writeup_files/figure-markdown_github/plot%20particle%20histograms-1.png)
 
