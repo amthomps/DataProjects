@@ -3,11 +3,12 @@ title: "Cell_Intensity_Analysis"
 author: "AMT"
 date: "April 3, 2018"
 output: 
-  html_document:
-    code_folding: hide
+  md_document:
+    variant: markdown_github
 editor_options: 
   chunk_output_type: console
 ---
+
 ##Introduction
 The purpose of this experiment was to determine the effect of Triton concentration on the fluorescence intensity of cells in PCR buffer containing 0.5X EvaGreen.  EvaGreen stains DNA and can only penetrate cells with compromised membranes, so more Triton could lead to more permeabilization and better cell staining.
 
@@ -31,7 +32,8 @@ knitr::include_graphics('./Example_map_3_FAM_50ms.png')
 
 **Figure 2. Map of particles measured by the ImageJ macro.**
 
-This is the code using ImageJ's macro language.  If the entire script is saved as a .txt file, it can be run in ImageJ by first opening the image containing particles to be analyzed, then navigating on the imageJ toolbar to plugins -> macros -> run.
+##ImageJ Analysis
+The following code is writen using ImageJ's macro language.  If all the macro code chunks are saved as a single .txt file, it can be run in ImageJ by first opening the image containing particles to be analyzed, then navigating on the imageJ toolbar to plugins -> macros -> run.
 
 The first few lines reset some parameters to default for consistancy, and set the image name and directory as variables so that we can eventually deposit a .csv file with the same name as the image.
 ```{r ImageJ 1, eval=FALSE}
@@ -71,6 +73,7 @@ run("Analyze Particles...", "size=2-200 circularity=0.80-1.00 show=Outlines disp
 saveAs("results",  dir + namebase + ".csv");
 ```
 
+##Cell Intensity Analysis in R
 In this experiment, I wanted to see if the intensity of the cells changed when the Triton concentration was varied between 0.02%, 0.03%, and 0.05%.  Triton should allow the dye to penetrate the cell membrane more easily, so one might expect an increase in cell intensity with increasing amounts of triton to a certain limit.  One image containing a few thousand cells was captured and analyzed at each condition.  Once all images were processed with the ImageJ macro above, the following R code was used to pull in all csv's in the folder for analysis and visualization.
 ```{r read csvs}
 #find all csv's in the current directory
@@ -136,4 +139,5 @@ ImgSummary <- AllImages %>% filter(Exposure == "50ms") %>%
 kable(ImgSummary)
 ```
 
+##Remarks
 For the project this is a part of, we want the cells to be as bright as possible without increasing the dye concentration.  The results of this experiment seem to indicate that increasing Triton does raise the average fluorescence intensity of our cells.  It might be interesting to find the limits to this, but other factors limit the amount of Triton we can use.  Nevertheless, an interesting result from one very quick experiment is a good thing, and more experiments will follow to further optimize cell brightness in our system.
