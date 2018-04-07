@@ -52,7 +52,7 @@ We can now use ImageJ's built-in Analyze Particles function. This function requi
 
 ``` r
 selectWindow(name);
-#open a copy of the image.  We will find the location of particles in this copy and   #measure values at the mapped locations in the original image.
+#Duplicate the image, find the location of particles in this copy, and measure values at the mapped locations in the original image.
 run("Duplicate...", " ");
 #a threshold of 805 seems appropriate for these images - 
 #above 805 is cell material, below 805 is background after flat-fielding.  

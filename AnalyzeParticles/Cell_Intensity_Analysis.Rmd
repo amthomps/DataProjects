@@ -60,7 +60,7 @@ imageCalculator("Divide", name,"20180118-flat-field-zoom-125-test4.tif");
 We can now use ImageJ's built-in Analyze Particles function.  This function requires binary images to operate.  Pixels with intensity = 1 are particles, and intensity = 0 is background.  We make this binary image by making a copy our cells image, applying a threshold, and converting everything above the threshold to 1 and below to 0.  We set the size (pixels^2) and circularity (0-1, where 1 is most circular), and Analyze Particles defines an ROI for each particle that fits this criteria.  We can then redirect these ROIs to our cell image and measure the size, integrated density, and mean intensity for each particle.  The resulting csv is exported to the directory.  We now have a .csv file with the same name as it's unprocessed .tif file.
 ```{r ImageJ 3, eval=FALSE}
 selectWindow(name);
-#open a copy of the image.  We will find the location of particles in this copy and   #measure values at the mapped locations in the original image.
+#Duplicate the image, find the location of particles in this copy, and measure values at the mapped locations in the original image.
 run("Duplicate...", " ");
 #a threshold of 805 seems appropriate for these images - 
 #above 805 is cell material, below 805 is background after flat-fielding.  
